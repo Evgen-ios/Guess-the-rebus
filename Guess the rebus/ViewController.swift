@@ -7,14 +7,18 @@
 
 import UIKit
 
+
+
 class ViewController: UIViewController {
     
     // MARK: - IB Outlets
     @IBOutlet weak var rebusImageView: UIImageView!
     @IBOutlet var letterButtons: [UIButton]!
     @IBOutlet weak var correctWordLable: UILabel!
-//    @IBOutlet weak var scoreLable: UILabel!
-    @IBOutlet weak var scoreLable: UINavigationItem!
+    @IBOutlet weak var scoreLable: UILabel!
+    @IBOutlet weak var timeLable: UINavigationItem!
+    @IBOutlet var heartsCollection: [UIImageView]!
+    
     
     
     // MARK: - Properties
@@ -76,7 +80,7 @@ class ViewController: UIViewController {
         "Туча",
         "Шкаф",
         "Шмель"
-    ]
+    ].shuffled()
     
     var totalWins = 0 {
         didSet {
@@ -113,10 +117,12 @@ class ViewController: UIViewController {
             updtaUI()
             return
         }
+        
         curretImage = listOfWords.removeFirst()
         curretGame = GameModel(word: curretImage, incorrectMovesRemaining: incorrectMovesAllowed)
         updtaUI()
         enableButtons()
+        setHeartImage()
     }
     
     func updateState() {
@@ -128,14 +134,34 @@ class ViewController: UIViewController {
             updtaUI()
         }
         updtaUI()
+        
     }
     
     func updtaUI() {
-
-       // let imageNumber = UIImage(named: curretImage)
+        
+        
         rebusImageView.image = UIImage(named: curretImage)
         curretCorrectWordLable()
-        scoreLable.title = "Выигрыши: \(totalWins) , проигрыши: \(totalLosses)"
+        scoreLable.text = "Выигрыши: \(totalWins)"
+        
+        if (curretGame.incorrectMovesRemaining < (heartsCollection.count - 1) ) {
+            
+            let heart = heartsCollection.filter { $0.tag == curretGame.incorrectMovesRemaining + 1 }.first
+            heart?.image = UIImage(systemName: "heart.slash")
+            heart?.tintColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
+            
+        }
+        //        print("Incorrect:  \(curretGame.incorrectMovesRemaining)")
+        //        print("Heali Count: \(heartsCollection.count)")
+        
+    }
+    
+    func setHeartImage() {
+        for index in heartsCollection {
+            index.image = UIImage(systemName: "heart.fill")
+            index.tintColor = #colorLiteral(red: 0.8074370027, green: 0.02273808047, blue: 0.3326697946, alpha: 1)
+            
+        }
     }
     
     override func viewDidLoad() {

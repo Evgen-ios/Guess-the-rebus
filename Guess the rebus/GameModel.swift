@@ -34,7 +34,8 @@ struct GameModel {
         let lowercasedLetter = Character(letter.lowercased())
         guessedLetters.append(lowercasedLetter)
         if !word.lowercased().contains(lowercasedLetter) {
-            // incorrectMovesRemaining -= 1
+            incorrectMovesRemaining -= 1
+            
         }
         
     }
